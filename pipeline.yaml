@@ -1,0 +1,44 @@
+
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+
+- task: AzurePowerShell@5
+  inputs:
+   azureSubscription: $(myazureSubscriptionvar)
+   scriptType: filePath
+   scriptPath: $(Build.SourcesDirectory)\createStorageAccount.ps1
+   azurePowerShellVersion: latestVersion
+   pwsh: true
+
+- task: AzureFileCopy@3
+  inputs:
+      SourcePath: $(Build.SourcesDirectory)
+      azureSubscription: $(myazureSubscriptionvar)
+      Destination: AzureBlob
+      storage: endpoint999
+      ContainerName: quickstartblobs
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+          deploymentScope: 'Resource Group'
+          azureResourceManagerConnection: $(myazureSubscriptionvar)
+          subscriptionId: $(mysubscriptionIdvar)
+          action: 'Create Or Update Resource Group'
+          resourceGroupName: 'Blogspot-rg'
+          location: 'West Europe'
+          templateLocation: 'URL of the file'
+          csmFileLink: 'https://endpoint999.blob.core.windows.net/quickstartblobs/master.json'
+          csmParametersFileLink: 'https://endpoint999.blob.core.windows.net/quickstartblobs/master.parameters.json'
+          deploymentMode: 'Incremental'
+- task: AzurePowerShell@5
+  inputs:
+          azureSubscription: $(myazureSubscriptionvar)
+          scriptType: filePath
+          scriptPath: $(Build.SourcesDirectory)\deleteStorageAccount.ps1
+          azurePowerShellVersion: latestVersion
+          pwsh: true

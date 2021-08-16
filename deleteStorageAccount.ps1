@@ -1,0 +1,1 @@
+Remove-AzStorageAccount -Name endpoint999 -ResourceGroupName Blogspot-rg -Force
