@@ -1,7 +1,7 @@
 # Automation-Project2
 
 In this solution I demonstrate how to use the "Linked Templates” method to break down a solution into targeted components.
-I am using a Master.json template to deploy two different Azure resources: A Keyvault and Applicaton Insights.
+I am using a Master.json template to deploy two different Azure resources: A Keyvault and a Vnet.
 Linked templates cannot be stored as a local file or a file that is only available on our local network. They must be uploaded first in an endpoint, for example Github or a storage account in Azure.
 In this solution, during the deployment, a PowerShell script creates a temporary storage account to store the ARM templates and after the deployment the script deletes the storage account .
 
